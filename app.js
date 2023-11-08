@@ -41,7 +41,7 @@ app.use(function(err, req, res, next) {
   res.send('error');
 });
 
-app.listen(process.env.port, ()=> console.log(`Server listening at http://localhost:${process.env.port}`))
+app.listen(process.env.port || 3000, ()=> console.log(`Server listening at http://localhost:${process.env.port}`))
 
 
 module.exports = app;
