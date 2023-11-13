@@ -2,62 +2,32 @@
 <html>
 <head>
   <title>Sign Up</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f0f0f0;
-      margin: 0;
-      padding: 0;
-    }
-    h1 {
-      background-color: #333;
-      color: #fff;
-      text-align: center;
-      padding: 10px;
-      margin: 0;
-    }
-    form {
-      max-width: 300px;
-      margin: 0 auto;
-      background-color: #fff;
-      padding: 20px;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-    }
-    label {
-      display: block;
-      margin-bottom: 10px;
-    }
-    input {
-      width: 100%;
-      padding: 10px;
-      margin-bottom: 10px;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-    }
-    button {
-      background-color: #333;
-      color: #fff;
-      padding: 10px 20px;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-  </style>
+  <link rel="stylesheet" type="text/css" href="/styles.css">
 </head>
 <body>
-  <h1>Sign Up</h1>
-  <form method="post" action="/signup">
-    <label for="username">Username:</label>
-    <input type="text" id="username" name="username" required>
+  <%- include('./header.ejs', {user: user}) %>
+
+  <h1 class="signup-title">Sign Up</h1>
+  <div class="error-section">
+    <% if (errors && errors.length > 0) { %>
+      <ul class="error-list">
+        <% errors.forEach(function(error) { %>
+          <li class="error-message"><%= error.msg %></li>
+        <% }); %>
+      </ul>
+    <% } %>
+  </div>
+  <div class="success-section">
+    <%- success || '' %>
+  </div>
+  <form class="signup-form" method="post" action="/signup">
+    <label for="username" class="input-label">Username:</label>
+    <input type="text" id="username" name="username" class="input-field" value="<%= username || '' %>" required>
     <br>
-    <label for="password">Password:</label>
-    <input type="password" id="password" name="password" required>
+    <label for="password" class="input-label">Password:</label>
+    <input type="password" id="password" name="password" class="input-field"  required>
     <br>
-    <label for="confirmPassword">Confirm Password:</label>
-    <input type="password" id="confirmPassword" name="confirmPassword" required>
-    <br>
-    <button type="submit">Sign Up</button>
+    <button type="submit" class="signin-button">Sign Up</button>
   </form>
 </body>
 </html>

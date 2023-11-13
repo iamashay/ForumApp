@@ -1,0 +1,15 @@
+<header class="site-header">
+    <div class="logo">
+      <h1>ForumApp</h1>
+    </div>
+    <nav>
+      <ul class="nav-links">
+        <li><a href="/" class="nav-link">Home</a></li>
+        <% if (!user){  %>
+        <li><a href="/signin" class="nav-link">Sign In</a></li>
+        <li><a href="/signup" class="nav-link">Sign Up</a></li>
+        <% } %>
+      </ul>
+    </nav>
+  </header>
+  

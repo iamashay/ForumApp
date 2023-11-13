@@ -1,10 +1,27 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <title></title>
+  <title>Homepage</title>
+  <link rel="stylesheet" type="text/css" href="/styles.css">
 </head>
 <body>
-  <h1>Testing Homepage</h1>
+  <%- include('./header.ejs', {user: user}) %>
+  <h1>Welcome,<span> <% if (user) { %> <%= user.username %><% } else { %>Guest<% } %>!</span></h1>
+  <% if (posts) { %>
+  <h2>Latest Posts</h2>
+  <ul class="post-list">
+    <% posts.forEach(function(post) { %>
+      <li class="post-item">
+        <h3 class="post-title"><%= post.title %></h3>
+        <p class="post-body"><%= post.body %></p>
+        <% if (user) { %>
+          <p class="post-author">Author: <%= post.author %></p>
+        <% } %>
+      </li>
+    <% }); %>
+  </ul>
+  <% } else { %>
+  <h3>No posts</h3>
+  <% } %>
 </body>
 </html>
