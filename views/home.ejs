@@ -6,38 +6,43 @@
 </head>
 <body>
   <%- include('./header.ejs', {user: user}) %>
-  <h1>Welcome,<span> <% if (user) { %> <%= user.username %><% } else { %>Guest<% } %>!</span></h1>
-  <% if(user) { %> 
-    <div class="post-form">
-      <form method="post" action="/post">
-        <h3>Create a New Post</h3>
-        <label for="postTitle" class="input-label">Title:</label>
-        <input type="text" id="title" name="title" class="input-field" required>
-        <br>
-        <label for="postBody" class="input-label">Body:</label>
-        <textarea id="body" name="body" class="input-field" rows="4" required></textarea>
-        <br>
-        <button type="submit" class="submit-button">Submit Post</button>
-      </form>
-    </div>
-  <% } %>
-  <% if (posts?.length > 0) { %>
-  <h2>Latest Posts</h2>
-  <ul class="post-list">
-    <% posts.forEach(function(post) { %>
-      <li class="post-item">
-        <h3 class="post-title"><%= post.title %></h3>
-        <p class="post-body"><%- post.body %></p>
-        <% if (user) { %>
-          <p class="post-author">Author: <%= post.user_id.username || '' %></p>
-        <% } else { %>
-          <p class="post-author">Author: Login to see %></p>
-        <% } %>
+  <main>
+    <h1>Welcome,<span> <% if (user) { %> <%= user.username %><% } else { %>Guest<% } %>!</span></h1>
+    <% if(user) { %> 
+      <div class="post-form">
+        <form method="post" action="/post">
+          <h3>Create a New Post</h3>
+          <label for="postTitle" class="input-label">Title:</label>
+          <input type="text" id="title" name="title" class="input-field" required>
+          <br>
+          <label for="postBody" class="input-label">Body:</label>
+          <textarea id="body" name="body" class="input-field" rows="4" required></textarea>
+          <br>
+          <button type="submit" class="submit-button">Submit Post</button>
+        </form>
+      </div>
+    <% } %>
+    <% if (posts?.length > 0) { %>
+    <h2>Latest Posts</h2>
+    <ul class="post-list">
+      <% posts.forEach(function(post) { %>
+        <li class="post-item">
+          <h3 class="post-title"><%= post.title %></h3>
+          <p class="post-body"><%- post.body %></p>
+          <div class="post-info">
+            <% if (user) { %>
+              <p class="post-author">Author: <%= post.user_id.username || '' %></p>
+            <% } else { %>
+                <p class="post-author">Author: Login to see</p>
+            <% } %>
+            <p class="post-date">Posted at  <%= post.fornattedDate %> </p>
+        </div>
       </li>
-    <% }); %>
-  </ul>
-  <% } else { %>
-  <h3>No posts</h3>
-  <% } %>
+      <% }); %>
+    </ul>
+    <% } else { %>
+    <h3>No posts</h3>
+    <% } %>
+  </main>
 </body>
 </html>

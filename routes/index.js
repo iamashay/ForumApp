@@ -7,7 +7,7 @@ const bcrypt = require('bcryptjs');
 const passport = require('../authentication');
 
 router.get('/', async function(req, res){ 
-    const posts = await PostModel.find().populate('user_id').exec()
+    const posts = await PostModel.find().sort({createdAt: -1}).populate('user_id').exec()
     res.render('home', {user: req.user, posts})
 })
 
