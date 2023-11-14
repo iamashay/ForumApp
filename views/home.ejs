@@ -31,11 +31,11 @@
           <p class="post-body"><%- post.body %></p>
           <div class="post-info">
             <% if (user) { %>
-              <p class="post-author">Author: <%= post.user_id.username || '' %></p>
+              <p>Author: <%= post.user_id.username || '' %></p>
             <% } else { %>
-                <p class="post-author">Author: Login to see</p>
+                <p>Author: Login to see</p>
             <% } %>
-            <p class="post-date">Posted at  <%= post.fornattedDate %> </p>
+            <p>Posted at  <%= post.fornattedDate %> </p>
         </div>
       </li>
       <% }); %>
