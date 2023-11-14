@@ -3,17 +3,33 @@ const router = express.Router()
 const { body, validationResult } = require("express-validator");
 const UserModel = require('../models/User')
 const bcrypt = require('bcryptjs');
-const passport = require('passport');
+const passport = require('../authentication');
 
 router.get('/', function(req, res){ 
-    res.render('home', {user: false, posts: false})
+    console.log(req.user)
+    res.render('home', {user: req.user, posts: false})
 })
 router.get('/signin', function(req, res){ 
     res.render('signin', {user: false, errors: false, username: false})
 })
-router.post('/signin', function(req, res){ 
-    passport.authenticate("local", res.redirect('/'))
-})
+
+router.post('/signin', 
+    passport.authenticate("local", {
+        failureMessage: true,
+        failureRedirect: "/signin"
+    }),
+    function(req, res){
+        res.redirect('/')
+    }
+)
+
+router.post('/logout', function(req, res, next){
+    req.logout(function(err) {
+      if (err) { return next(err); }
+      res.redirect('/');
+    });
+});
+
 router.get('/signup', function(req, res){ 
     res.render('signup', {user: false, errors: false, username: false, success: false})
 })
