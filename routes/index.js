@@ -62,7 +62,7 @@ router.post('/signup',
         const {username, password} = req.body
         const errors = validationResult(req)
         if (!errors.isEmpty()) {
-            console.log(errors.array())
+            //console.log(errors.array())
             res.render('signup', {user: false, username, errors: errors.array(), success: false})
             return
         }
@@ -101,6 +101,19 @@ router.post(
         })
         await Post.save()
         res.redirect('/')
+})
+
+router.get(
+    '/post/:postId/delete', 
+    async (req, res) => {
+        const {user} = req
+        if (!user) return res.status(401).send('Unauthorized')
+        const {postId} = req.params
+        const currentPost = await PostModel.findById(postId)
+        if (!currentPost) return res.redirect('/')
+        if (currentPost.user_id.toString() !== user.id) return res.status(401).send('Unauthorized')
+        await PostModel.findOneAndDelete({_id: postId})
+        return res.redirect('/')
 })
 
 module.exports = router

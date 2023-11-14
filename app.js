@@ -4,7 +4,7 @@ const session = require("express-session");
 const path = require('path');
 const logger = require('morgan');
 const passport = require('./authentication.js')
-const MemoryStore = require('memorystore')(session)
+const MongoStore = require('connect-mongo');
 
 require('dotenv').config()
 const mongoose = require("mongoose");
@@ -29,9 +29,10 @@ app.use(session({
   resave: false, 
   saveUninitialized: true,
   cookie: { maxAge: 86400000 },
-  store: new MemoryStore({
-    checkPeriod: 86400000 // prune expired entries every 24h
-  }), 
+  store: MongoStore.create({ 
+    mongoUrl: process.env.MONGO_URL 
+  })
+
 }));
 app.use(passport.initialize());
 app.use(passport.session());
@@ -51,7 +52,7 @@ app.use(function(req, res, next) {
 // error handler
 app.use(function(err, req, res, next) {
   res.status(err.status || 500);
-  req.app.get('env') === 'development' ? res.send(`<pre>${err.stack}</pre>`) : res.send('Error!');
+  req.app.get('env') === 'development' ? res.send(`<pre>${err.stack}</pre>`) : res.status('500').send('Error!');
 });
 
 app.listen(process.env.PORT || 3000, ()=> console.log(`Server listening at http://localhost:${process.env.PORT || 3000}`))

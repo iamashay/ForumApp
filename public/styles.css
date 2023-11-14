@@ -52,6 +52,7 @@ body, html {
     margin: 10px 0;
     border-radius: 5px;
     border: 1px solid #bababa;
+    position: relative;
   }
 
   .post-info {
@@ -72,6 +73,17 @@ body, html {
     color: #888;
   }
   
+  .delete-post {
+    position: absolute;
+    top: 5px;
+    right: 9px;
+    text-decoration: none;
+    color: #bf0303;
+    font-size: 16px;
+    font-family: sans-serif;
+    font-weight: 600;
+  }
+
   /* Sign-In view styles */
   .signin-title {
     text-align: center;

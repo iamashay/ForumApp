@@ -36,8 +36,10 @@
                 <p>Author: Login to see</p>
             <% } %>
             <p>Posted at  <%= post.fornattedDate %> </p>
-        </div>
-      </li>
+          </div>
+          <% if(user?.id === post.user_id.id) {%><a class="delete-post" title="Delete this post" href="/post/<%= post.id %>/delete">X</a>
+          <% } %>
+        </li>
       <% }); %>
     </ul>
     <% } else { %>
