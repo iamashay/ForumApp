@@ -8,6 +8,8 @@
         <% if (!user){  %>
         <li><a href="/signin" class="nav-link">Sign In</a></li>
         <li><a href="/signup" class="nav-link">Sign Up</a></li>
+        <% } else { %>
+        <li><a href="/logout" class="nav-link">Logout</a></li>
         <% } %>
       </ul>
     </nav>

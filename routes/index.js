@@ -2,42 +2,51 @@ const express = require('express')
 const router = express.Router()
 const { body, validationResult } = require("express-validator");
 const UserModel = require('../models/User')
+const PostModel = require('../models/Post')
 const bcrypt = require('bcryptjs');
 const passport = require('../authentication');
 
-router.get('/', function(req, res){ 
-    console.log(req.user)
-    res.render('home', {user: req.user, posts: false})
-})
-router.get('/signin', function(req, res){ 
-    res.render('signin', {user: false, errors: false, username: false})
+router.get('/', async function(req, res){ 
+    const posts = await PostModel.find().populate('user_id').exec()
+    res.render('home', {user: req.user, posts})
 })
 
-router.post('/signin', 
+router.get('/signin', function(req, res){ 
+    const user = req.user
+    if (user) return res.redirect('/')
+    res.render('signin', {user: false, errors: req.session.messages || [], username: false})
+    req.session.destroy()
+})
+
+router.post(
+    '/signin', 
     passport.authenticate("local", {
-        failureMessage: true,
+        successRedirect: '/',
+        failureMessage: 'Invalid username or password',
         failureRedirect: "/signin"
-    }),
-    function(req, res){
-        res.redirect('/')
-    }
+    })
 )
 
-router.post('/logout', function(req, res, next){
+router.get('/logout', function(req, res, next){
     req.logout(function(err) {
       if (err) { return next(err); }
       res.redirect('/');
     });
 });
 
-router.get('/signup', function(req, res){ 
+router.get('/signup', function(req, res){
+    const user = req.user
+    if (user) return res.redirect('/')
     res.render('signup', {user: false, errors: false, username: false, success: false})
 })
 router.post('/signup',   
 
-    body("username", "Title must not be empty.")
+    body("username")
         .trim()
         .isLength({ min: 1 })
+        .withMessage("Title must not be empty.")
+        .isAlphanumeric()
+        .withMessage("Username should contain only alphabets and numbers")
         .escape(),
     body("username").custom(async (username) => {
         const user = await UserModel.findOne({username})
@@ -66,4 +75,32 @@ router.post('/signup',
         res.render('signup', {user: false, username: false, errors: false, success: 'Successully signed up!'})
 
 })
+
+router.post(
+    '/post', 
+    body('title')
+        .notEmpty()
+        .withMessage('Title shouldn\'nt be empty')
+        .escape(), 
+    body('body')
+        .notEmpty()
+        .withMessage('Body shouldn\'nt be empty')
+        .escape(), 
+    async (req, res) => {
+        const user = req.user
+        if (!user) return res.redirect('/signin')
+        const {title, body} = req.body
+        const errors = validationResult(req)
+        if (!errors.isEmpty()){
+            return res.render('home', {username: user.username, errors, title, body})
+        }
+        const Post = new PostModel({
+            title,
+            body,
+            user_id: user.id
+        })
+        await Post.save()
+        res.redirect('/')
+})
+
 module.exports = router
