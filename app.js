@@ -4,6 +4,8 @@ const session = require("express-session");
 const path = require('path');
 const logger = require('morgan');
 const passport = require('./authentication.js')
+const MemoryStore = require('memorystore')(session)
+
 require('dotenv').config()
 const mongoose = require("mongoose");
 
@@ -22,7 +24,15 @@ main().catch((err) => console.log(err));
 app.set('views', './views/');
 app.set('view engine', 'ejs');
 app.set('env', 'development');
-app.use(session({ secret: "cats", resave: false, saveUninitialized: true }));
+app.use(session({ 
+  secret: "cats", 
+  resave: false, 
+  saveUninitialized: true,
+  cookie: { maxAge: 86400000 },
+  store: new MemoryStore({
+    checkPeriod: 86400000 // prune expired entries every 24h
+  }), 
+}));
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(logger('dev'));
