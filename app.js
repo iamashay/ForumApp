@@ -54,6 +54,6 @@ app.use(function(err, req, res, next) {
   req.app.get('env') === 'development' ? res.send(`<pre>${err.stack}</pre>`) : res.send('Error!');
 });
 
-app.listen(process.env.port || 3000, ()=> console.log(`Server listening at http://localhost:${process.env.port || 3000}`))
+app.listen(process.env.PORT || 3000, ()=> console.log(`Server listening at http://localhost:${process.env.PORT || 3000}`))
 
 module.exports = app;
