@@ -3,6 +3,7 @@ const LocalStrategy = require('passport-local')
 const GoogleStrategy = require('passport-google-oauth20');
 const UserModel = require('./models/User')
 const bcrypt = require('bcryptjs')
+require('dotenv').config()
 
 function generateRandomString(length) {
     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789@_';
@@ -38,8 +39,8 @@ passport.use(
 
 
 passport.use(new GoogleStrategy({
-    clientID: '414305582743-hpbe181ktv97ihsj07h0qpp9hd9bltp8.apps.googleusercontent.com',
-    clientSecret: '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',
+    clientID: process.env.GOOGLE_CLIENT_ID,
+    clientSecret: process.env.GOOGLE_CLIENT_SECRET,
     callbackURL: 'http://localhost:3000/auth/google/callback', // Adjust the callback URL
 },
 async (accessToken, refreshToken, profile, done) => {
