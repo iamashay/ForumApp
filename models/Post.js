@@ -6,7 +6,6 @@ const PostSchema = new Schema({
     title: {type: String, required: true},
     body: {type: String, required: true},
     user_id: { type: Schema.Types.ObjectId, ref: "users", required: true },
-    google_id: {type: String}
 }, {
     timestamps: true,
 })
