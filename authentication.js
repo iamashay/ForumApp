@@ -2,6 +2,7 @@ const passport = require('passport')
 const LocalStrategy = require('passport-local')
 const UserModel = require('./models/User')
 const bcrypt = require('bcryptjs')
+const GoogleStrategy = require('passport-google-oauth20').Strategy;
 require('dotenv').config()
 
 function generateRandomString(length) {
