@@ -27,6 +27,24 @@ router.post(
     })
 )
 
+router.get(
+    '/signin/google', 
+    passport.authenticate('google', {
+            scope:
+                ['email', 'profile']
+    })
+)
+
+router.get(
+    '/auth/google/callback', 
+    passport.authenticate('google', {
+        failureRedirect: '/signin',
+    }),
+    function (req, res) {
+        res.redirect('/')
+    }
+)
+
 router.get('/logout', function(req, res, next){
     req.logout(function(err) {
       if (err) { return next(err); }
@@ -39,6 +57,7 @@ router.get('/signup', function(req, res){
     if (user) return res.redirect('/')
     res.render('signup', {user: false, errors: false, username: false, success: false})
 })
+
 router.post('/signup',   
 
     body("username")
